@@ -28,18 +28,15 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
-    @PostMapping("signin")
-
-    public ResponseEntity<String> signUser(@RequestBody SignRequest signRequest)
-    {
+@PostMapping("signin")
+    public ResponseEntity<String> signUser(@RequestBody SignRequest signRequest) {
         authService.signUp(signRequest);
         return ResponseEntity.ok("User added succesfuly");
 
     }
 
     @PostMapping("login")
-    public ResponseEntity<?>login(@RequestBody LoginRequest loginRequest)
-    {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 
         return ResponseEntity.ok(authService.login(loginRequest));
     }

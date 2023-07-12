@@ -41,17 +41,16 @@ public class AuthService {
     JwtProvider jwtProvider;
 
 
-    public JwtResponse login(LoginRequest loginRequest)
-    {
-        Authentication authentication=authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword())
+    public JwtResponse login(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwtToken=jwtProvider.genereateJwtToken(authentication);
-        UserDetailImplement userDetailImplement= (UserDetailImplement) authentication.getPrincipal();
-        List<String > roles=userDetailImplement.getAuthorities().stream().map(
-                item->item.getAuthority()
+        String jwtToken = jwtProvider.genereateJwtToken(authentication);
+        UserDetailImplement userDetailImplement = (UserDetailImplement) authentication.getPrincipal();
+        List<String> roles = userDetailImplement.getAuthorities().stream().map(
+                item -> item.getAuthority()
         ).collect(Collectors.toList());
 
         return new JwtResponse(jwtToken,
@@ -63,13 +62,12 @@ public class AuthService {
 
     public void signUp(SignRequest signRequest) {
 
-if(userRepository.existByMail(signRequest.getEmail()))
-{
-    return;
+        if (userRepository.existByMail(signRequest.getEmail())) {
+            return;
 
-}
+        }
 
-if(userRepository.existByUsername(signRequest.getUsername())) return;
+        if (userRepository.existByUsername(signRequest.getUsername())) return;
 
         User newUser = new User(
                 signRequest.getName(),

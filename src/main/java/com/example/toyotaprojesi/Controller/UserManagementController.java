@@ -11,31 +11,20 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/controller/auth")
+@RequestMapping("/api/user")
 public class UserManagementController {
 
     @Autowired
     UserManagementService userManagementService;
 
+    @GetMapping("get")
+    public ResponseEntity<List> getUsers() {
+        return new ResponseEntity<>(userManagementService.getAllUsers(), HttpStatus.OK);
+    }
 
-//    @Autowired
-//    AuthService authService;
-
-//    @PostMapping("signin")
-//    public ResponseEntity<String> signUser(@RequestBody SignRequest signRequest) {
-//
-//        userManagementService.signUp(signRequest);
-//        return new ResponseEntity<>("User added succesfuly", HttpStatus.CREATED);
-//
-//
-//    }
-
-@GetMapping("test1")
-public ResponseEntity<String>test1()
-{
-    return new ResponseEntity<>(" access",HttpStatus.OK);
-}
 
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user) {

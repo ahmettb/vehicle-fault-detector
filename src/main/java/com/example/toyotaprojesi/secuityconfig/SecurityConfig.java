@@ -57,8 +57,7 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authentacitionEntryJwt))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/controller/auth/**").hasAuthority("ROLE_TEAMLEADER").
-                                requestMatchers("/api/usercontrol/**").permitAll()
+                        auth.requestMatchers("/api/user/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated()
 
