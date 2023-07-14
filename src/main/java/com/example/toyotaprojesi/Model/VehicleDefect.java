@@ -2,24 +2,38 @@ package com.example.toyotaprojesi.Model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "VehicleDefect")
+@Table(name = "vehicle_defect")
 public class VehicleDefect {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
-    @Column(name = "defectName")
-    String defectName;
-    @Column(name = "defectX")
-    int defectX;
-    @Column(name = "defectY")
-    int defectY;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vehicle_id", nullable = false)
+    private Vehicle vehicle;
 
-    @ManyToMany(mappedBy = "vehicleDefects")
-    List<Vehicle> vehicles = new ArrayList<>();
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Defect getDefect() {
+        return defect;
+    }
+
+    public void setDefect(Defect defect) {
+        this.defect = defect;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "defect_id", nullable = false)
+    private Defect defect;
 }
+
+
+// getters and setters
