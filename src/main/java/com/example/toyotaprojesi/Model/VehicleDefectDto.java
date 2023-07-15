@@ -4,12 +4,21 @@ public class VehicleDefectDto {
 
     private String marka;
 
+    private String modelNo;
     private String model;
 
     private int yil;
 
     public String getMarka() {
         return marka;
+    }
+
+    public String getModelNo() {
+        return modelNo;
+    }
+
+    public void setModelNo(String modelNo) {
+        this.modelNo = modelNo;
     }
 
     public void setMarka(String marka) {

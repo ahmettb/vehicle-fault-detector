@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,12 @@ public class AuthService {
 
 
     public JwtResponse login(LoginRequest loginRequest) {
+
+        if(!userRepository.existByUsername(loginRequest.getUsername()))
+        {
+            throw  new UsernameNotFoundException("Username not found");
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
@@ -63,11 +70,11 @@ public class AuthService {
     public void signUp(SignRequest signRequest) {
 
         if (userRepository.existByMail(signRequest.getEmail())) {
-            return;
-
+return;
         }
 
-        if (userRepository.existByUsername(signRequest.getUsername())) return;
+        if (userRepository.existByUsername(signRequest.getUsername()))
+        {return;}
 
         User newUser = new User(
                 signRequest.getName(),
@@ -77,7 +84,6 @@ public class AuthService {
                 passwordEncoder.encode(signRequest.getPassword()));
 
         List<String> role = signRequest.getRoles();
-        role.forEach(roles -> System.out.println(roles));
         List<UserRole> roles = new ArrayList<>();
         if (role == null) {
             UserRole userRole = userRoleRepository.findByName(ERole.ROLE_ADMIN)

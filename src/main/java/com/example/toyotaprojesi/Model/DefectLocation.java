@@ -1,5 +1,6 @@
 package com.example.toyotaprojesi.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class DefectLocation {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "defect_id", nullable = false)
+    @JsonIgnore
     private Defect defect;
 
     public Defect getDefect() {

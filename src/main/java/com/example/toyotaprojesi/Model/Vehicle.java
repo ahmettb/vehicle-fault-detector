@@ -1,6 +1,7 @@
 package com.example.toyotaprojesi.Model;
 
 import jakarta.persistence.*;
+import org.hibernate.boot.model.internal.XMLContext;
 
 @Entity
 @Table(name = "vehicle")
@@ -13,6 +14,28 @@ public class Vehicle {
 
 @Column(name ="marka" )
     private String marka;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Column(name="deleted")
+boolean deleted= false;
+
+    public String getModelNo() {
+        return modelNo;
+    }
+
+    public void setModelNo(String modelNo) {
+        this.modelNo = modelNo;
+    }
+
+    @Column(name = "modelNo")
+private String modelNo;
 
     public String getMarka() {
         return marka;
@@ -47,7 +70,6 @@ public class Vehicle {
     }
 
     @Column(name = "model")
-
     private String model;
     @Column(name ="yil" )
 
