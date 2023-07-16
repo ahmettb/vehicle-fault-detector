@@ -3,6 +3,8 @@ package com.example.toyotaprojesi.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "defect_location")
 public class DefectLocation {
@@ -13,8 +15,10 @@ public class DefectLocation {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "defect_id", nullable = false)
-    @JsonIgnore
+    //@JsonIgnore
     private Defect defect;
+
+
 
     public Defect getDefect() {
         return defect;

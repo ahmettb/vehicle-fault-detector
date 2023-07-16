@@ -14,8 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,6 +150,7 @@ public class VehicleService {
 
         VehicleDefect vehicleDefect = new VehicleDefect();
 
+
         vehicleDefect.setVehicle(vehicle);
         vehicleDefect.setDefect(defect);
         vehicleDefectRepository.save(vehicleDefect);
@@ -146,14 +158,46 @@ public class VehicleService {
 
     }
 
-    public VehicleDefectDto addDefectToVehicleByModelNo(String modelNo, VehicleDefectDto vehicleDefectDto) throws VehicleNotFoundException {
+    public void saveImage(byte[] imageByte, int x, int y) throws IOException {
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(imageByte);
+        BufferedImage image = ImageIO.read(bais);
+
+        Graphics2D graphics2D = image.createGraphics();
+
+        graphics2D.setColor(Color.RED);
+        graphics2D.drawOval(x, y, 30, 30);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] bytes = baos.toByteArray();
+
+
+    }
+
+    public VehicleDefectDto addDefectToVehicleByModelNo(String modelNo, VehicleDefectDto vehicleDefectDto, MultipartFile resim) throws VehicleNotFoundException, IOException, SQLException {
+
 
         Vehicle vehicle = vehicleRepository.findByModel(modelNo).orElseThrow(() -> new VehicleNotFoundException("Vehicle Not Found with Model No : " + modelNo));
 
 
         Defect defect = new Defect();
         defect.setDefectName(vehicleDefectDto.getHataAdi());
+
         defectRepository.save(defect);
+        byte[]resimByte=resim.getBytes();
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(resimByte);
+        BufferedImage image = ImageIO.read(bais);
+
+        Graphics2D graphics2D = image.createGraphics();
+
+        graphics2D.setColor(Color.RED);
+        graphics2D.drawOval(vehicleDefectDto.getxKoordinati(), vehicleDefectDto.getyKoordinati(), 30, 30);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        byte[] bytes = baos.toByteArray();
+        Blob blob = new SerialBlob(bytes);
+
 
         DefectLocation defectLocation = new DefectLocation();
         defectLocation.setyKoordinati(vehicleDefectDto.getyKoordinati());
@@ -166,10 +210,34 @@ public class VehicleService {
         VehicleDefect vehicleDefect = new VehicleDefect();
         vehicleDefect.setVehicle(vehicle);
         vehicleDefect.setDefect(defect);
+        vehicleDefect.setResim(bytes);
         vehicleDefectRepository.save(vehicleDefect);
-        return null;
+        vehicleDefectDto.setMarka(vehicle.getMarka());
+        vehicleDefectDto.setModel(vehicle.getModel());
+        vehicleDefectDto.setModelNo(vehicle.getModelNo());
+        vehicleDefectDto.setYil(vehicle.getYil());
+        vehicleDefectDto.setRenk(vehicle.getRenk());
+        return vehicleDefectDto;
 
     }
 
+    public byte[] resimGetir(long hataId) throws SQLException, IOException {
+
+        VehicleDefect vehicleDefect = vehicleDefectRepository.findById(hataId).orElseThrow(null);
+
+        if (vehicleDefect != null) {
+
+           // byte[] bytes = vehicleDefect.getImage().getBytes(1, (int) vehicleDefect.getImage().length());
+
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(vehicleDefect.getResim());
+
+
+            BufferedImage image = ImageIO.read(byteArrayInputStream);
+
+            return vehicleDefect.getResim();
+        }
+
+        return null;
+    }
 
 }
