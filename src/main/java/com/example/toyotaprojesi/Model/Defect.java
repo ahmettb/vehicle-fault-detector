@@ -1,5 +1,6 @@
 package com.example.toyotaprojesi.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
@@ -19,6 +20,7 @@ private String defectName;
 private Blob resim;
 
 @Column(name = "deleted")
+@JsonIgnore
 private boolean deleted;
 
     public boolean isDeleted() {

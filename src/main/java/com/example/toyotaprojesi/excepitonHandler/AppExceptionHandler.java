@@ -1,5 +1,6 @@
 package com.example.toyotaprojesi.excepitonHandler;
 
+import com.example.toyotaprojesi.exception.ImageNotFoundException;
 import com.example.toyotaprojesi.exception.VehicleAlreadyExistException;
 import com.example.toyotaprojesi.exception.VehicleNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,15 @@ public class AppExceptionHandler {
         errorMap.put("Error Message", ex.getMessage());
         return errorMap;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ImageNotFoundException.class)
+    public Map<String, String> handleImageNotFound(ImageNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error Message", ex.getMessage());
+        return errorMap;
+    }
+
 
 
 

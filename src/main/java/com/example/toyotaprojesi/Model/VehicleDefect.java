@@ -2,9 +2,11 @@ package com.example.toyotaprojesi.Model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.persistence.*;
+import jdk.dynalink.linker.LinkerServices;
 import org.hibernate.annotations.Type;
 
 import java.sql.Blob;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicle_defect")
@@ -14,7 +16,7 @@ public class VehicleDefect {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
@@ -34,30 +36,30 @@ public class VehicleDefect {
         this.defect = defect;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "defect_id", nullable = false)
     private Defect defect;
 
-    @Lob
-    private Blob image;
-
-    public byte[] getResim() {
-        return resim;
-    }
-
-    public void setResim(byte[] resim) {
-        this.resim = resim;
-    }
-
-    private byte[]resim;
-
-    public Blob getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(Image image) {
         this.image = image;
     }
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "resim_id", nullable = false)
+    private Image image;
+
+
+
+
+
+
+
+
+
 }
 
 

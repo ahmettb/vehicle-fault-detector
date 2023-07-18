@@ -1,8 +1,33 @@
 package com.example.toyotaprojesi.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class VehicleDefectResponse {
+
+@JsonIgnore
+    private VehicleDefect vehicleDefect;
+
+    public VehicleDefect getVehicleDefect() {
+        return vehicleDefect;
+    }
+
+    public void setVehicleDefect(VehicleDefect vehicleDefect) {
+        this.vehicleDefect = vehicleDefect;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    private Vehicle vehicle;
+
+    private List<Defect>defects;
 
 
     private String marka;

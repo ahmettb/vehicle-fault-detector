@@ -1,7 +1,9 @@
 package com.example.toyotaprojesi.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.boot.model.internal.XMLContext;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "vehicle")
@@ -24,6 +26,7 @@ public class Vehicle {
     }
 
     @Column(name="deleted")
+            @JsonIgnore
 boolean deleted= false;
 
     public String getModelNo() {
