@@ -8,6 +8,7 @@ import jakarta.annotation.Resource;
 import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,9 +34,9 @@ public class VehicleController {
     @Autowired
     VehicleService vehicleService;
 
-    @PostMapping("add")
+    @PostMapping("addVehicle")
     public ResponseEntity<VehicleDefectDto> vehicleAndDefectSave(@RequestPart("vehicle") VehicleDefectDto vehicleDefectDto, @RequestPart(required = false) MultipartFile multipartFile) throws Exception {
-        vehicleService.vehicleAdd(vehicleDefectDto,multipartFile);
+        vehicleService.vehicleAdd(vehicleDefectDto, multipartFile);
         return new ResponseEntity<>(vehicleDefectDto, HttpStatus.CREATED);
     }
 
@@ -51,18 +52,22 @@ public class VehicleController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(vehicleService.resimGetir(id));
 
     }
+
     @GetMapping(value = "getImageById/{id}")
-    public ResponseEntity <List<byte[]>>getImageByVehicleId(@PathVariable("id") long id) throws SQLException, IOException {
+    public ResponseEntity<List<byte[]>> getImageByVehicleId(@PathVariable("id") long id) throws SQLException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<>(vehicleService.getImagesByVehicleId(id),headers,HttpStatus.OK);
+        return new ResponseEntity<>(vehicleService.getImagesByVehicleId(id), headers, HttpStatus.OK);
 
     }
 
+    @GetMapping("getdefect")
+    public ResponseEntity<Page<Defect>> defects(@RequestParam("page") int page) {
+        return new ResponseEntity<>(vehicleService.defects(page), HttpStatus.OK);
+    }
 
-        @GetMapping("getVehicleInfo/{id}")
+    @GetMapping("getVehicleInfo/{id}")
     public ResponseEntity<Map<String, Object>> getVehicleById(@PathVariable("id") long id) throws VehicleNotFoundException {
-
 
 
         return new ResponseEntity<>(vehicleService.getVehicleInfo(id), HttpStatus.OK);

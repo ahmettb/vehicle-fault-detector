@@ -59,7 +59,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/user/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/vehicle/**").permitAll()
+                                .requestMatchers("/api/vehicle/**").hasAuthority("ROLE_TEAMLEADER")
                                 .anyRequest().authenticated()
 
                 )

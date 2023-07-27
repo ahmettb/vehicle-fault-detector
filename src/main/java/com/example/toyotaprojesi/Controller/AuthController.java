@@ -29,7 +29,7 @@ public class AuthController {
     AuthService authService;
 
 @PostMapping("signin")
-    public ResponseEntity<String> signUser(@RequestBody SignRequest signRequest) {
+    public ResponseEntity<String> signUser(@RequestBody SignRequest signRequest) throws Exception {
         authService.signUp(signRequest);
         return ResponseEntity.ok("User added succesfuly");
 

@@ -1,8 +1,6 @@
 package com.example.toyotaprojesi.excepitonHandler;
 
-import com.example.toyotaprojesi.exception.ImageNotFoundException;
-import com.example.toyotaprojesi.exception.VehicleAlreadyExistException;
-import com.example.toyotaprojesi.exception.VehicleNotFoundException;
+import com.example.toyotaprojesi.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,6 +17,21 @@ public class AppExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(VehicleNotFoundException.class)
     public Map<String, String> handleVehicleNotFoundException(VehicleNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error Message", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UsernameAlreadyExist.class)
+    public Map<String, String> handleUsernameAlreadyExist(UsernameAlreadyExist ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("Error Message", ex.getMessage());
+        return errorMap;
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(MailAlreadyExist.class)
+    public Map<String, String> handleMailAlreadyExist(MailAlreadyExist ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("Error Message", ex.getMessage());
         return errorMap;

@@ -5,6 +5,8 @@ import com.example.toyotaprojesi.Model.User;
 import com.example.toyotaprojesi.Model.UserRole;
 import com.example.toyotaprojesi.Repository.UserRepository;
 import com.example.toyotaprojesi.Repository.UserRoleRepository;
+import com.example.toyotaprojesi.exception.MailAlreadyExist;
+import com.example.toyotaprojesi.exception.UsernameAlreadyExist;
 import com.example.toyotaprojesi.jwt.JwtProvider;
 import com.example.toyotaprojesi.request.LoginRequest;
 import com.example.toyotaprojesi.request.SignRequest;
@@ -67,14 +69,17 @@ public class AuthService {
                 roles);
     }
 
-    public void signUp(SignRequest signRequest) {
+    public void signUp(SignRequest signRequest) throws Exception {
 
         if (userRepository.existByMail(signRequest.getEmail())) {
-return;
+        throw new MailAlreadyExist("Mail already exist");
         }
 
         if (userRepository.existByUsername(signRequest.getUsername()))
-        {return;}
+        {
+            throw new UsernameAlreadyExist("Username already exist");
+
+        }
 
         User newUser = new User(
                 signRequest.getName(),

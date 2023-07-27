@@ -11,12 +11,15 @@ import com.example.toyotaprojesi.exception.ImageNotFoundException;
 import com.example.toyotaprojesi.exception.VehicleAlreadyExistException;
 import com.example.toyotaprojesi.exception.VehicleNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
@@ -79,6 +82,14 @@ public class VehicleService {
         }
     }
 
+    public byte[] resimGetir(long hataId) throws SQLException, IOException, ImageNotFoundException {
+
+        VehicleDefect vehicleDefect = vehicleDefectRepository.findById(hataId).orElseThrow(() -> new ImageNotFoundException("Image not found"));
+
+
+        return vehicleDefect.getImage().getImage();
+    }
+
 
     public Map<String,Object> getVehicleInfo(long id) throws VehicleNotFoundException {
 
@@ -120,40 +131,6 @@ public class VehicleService {
         result.put("Vehicle",vehicleInfo);
         result.put("Defect",defects);
         return result;
-
-
-
-
-//
-//        List<VehicleDefectResponse> vehicleResponse = new ArrayList<>();
-//
-//        Vehicle vehicleOptional = vehicleRepository.activeVehicleById(id);
-//        if (vehicleOptional == null) {
-//            throw new VehicleNotFoundException("Vehicle not found with id : " + id);
-//        }
-//
-//        Vehicle vehicle = vehicleOptional;
-//        List<VehicleDefect> vehicleDefectList = vehicleDefectRepository.findByVehicle(vehicle);
-//        List<DefectLocation> defectLocations = new ArrayList<>();
-//
-//
-//        for (VehicleDefect vehicleDefect : vehicleDefectList) {
-//            List<DefectLocation> defectLocationListForDefect = vehicleDefectLocationRepo.findByDefect(vehicleDefect.getDefect());
-//            defectLocations.addAll(defectLocationListForDefect);
-//            for (DefectLocation defectLocation : defectLocationListForDefect) {
-//                VehicleDefectResponse vehicleDefectResponse = new VehicleDefectResponse();
-//                vehicleDefectResponse.setMarka(vehicle.getMarka());
-//                vehicleDefectResponse.setModel(vehicle.getModel());
-//                vehicleDefectResponse.setYil(vehicle.getYil());
-//                vehicleDefectResponse.setRenk(vehicle.getRenk());
-//                vehicleDefectResponse.setHataAdi(vehicleDefect.getDefect().getDefectName());
-//                vehicleDefectResponse.setXkoordinat(defectLocation.getxKoordinati());
-//                vehicleDefectResponse.setYkoordinat(defectLocation.getyKoordinati());
-//                vehicleResponse.add(vehicleDefectResponse);
-//            }
-//        }
-//
-//        return vehicleResponse;
 
     }
 
@@ -220,22 +197,7 @@ public class VehicleService {
 
     }
 
-    //    public void saveImage(byte[] imageByte, int x, int y) throws IOException {
-//
-//        ByteArrayInputStream bais = new ByteArrayInputStream(imageByte);
-//        BufferedImage image = ImageIO.read(bais);
-//
-//        Graphics2D graphics2D = image.createGraphics();
-//
-//        graphics2D.setColor(Color.RED);
-//        graphics2D.drawOval(x, y, 30, 30);
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        ImageIO.write(image, "png", baos);
-//        byte[] bytes = baos.toByteArray();
-//
-//
-//    }
-//
+
     private byte[] saveImageByVehicle(MultipartFile resim, VehicleDefectDto vehicleDefectDto) throws IOException {
         byte[] resimByte = resim.getBytes();
 
@@ -312,12 +274,15 @@ public class VehicleService {
 
     }
 
-    public byte[] resimGetir(long hataId) throws SQLException, IOException, ImageNotFoundException {
-
-        VehicleDefect vehicleDefect = vehicleDefectRepository.findById(hataId).orElseThrow(() -> new ImageNotFoundException("Image not found"));
 
 
-        return vehicleDefect.getImage().getImage();
+    public Page<Defect> defects(int page)
+    {
+//        Pageable pageable=PageRequest.of(page,10);
+        Pageable pageable=PageRequest.of(page,1 );
+        return defectRepository.activeDefect(pageable);
+
+
     }
 
 }
