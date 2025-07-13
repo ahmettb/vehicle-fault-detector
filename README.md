@@ -1,7 +1,7 @@
 
-# Vehicle Defect Log
+# Vehicle Fault Detector
 
-Vehicle Error Log Application is an application for logging errors and faults for vehicles. With this application, vehicles defects and defect images can be save.
+Vehicle Fault Detector is an application for logging errors and faults for vehicles. With this application, vehicle defects and defect images can be saved.
 
 ## Technologies Used
 
@@ -23,7 +23,7 @@ Vehicle Error Log Application is an application for logging errors and faults fo
 
  - Clone project repository
 ```java
-git clone https://github.com/ahmettb/vehicleErrorApp.git
+git clone https://github.com/ahmettb/vehicle-fault-detector.git
 
 ```
 
@@ -50,15 +50,12 @@ spring.servlet.multipart.maxRequestSize=1000000KB
   
 ## Screenshots
 
-Sign Page
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/mgaizth.png 
-)
+### Register Page
+![Register Page](register.png)
 
-Login Page
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/ttpxugm.png 
-)
+### Login Page
+![Login Page](login.png)
 
-Defect Point Image
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/m0ybfn4.png 
-)
+### Defect Point Image
+![Defect Point](defect-point.png)
 
